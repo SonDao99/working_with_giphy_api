@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Get-A-Gif!</title>
+</head>
+<body>
+    <style>
+        body {
+            background-color: black;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        input {
+            padding: 10px;
+            border-radius: 5px;
+            border-style: none;
+        }
+
+        button {
+            padding: 10px;
+            background-color: midnightblue;
+            color: white;
+            border-radius: 5px;
+            border-style: none;
+            height: 40px;
+        }
+
+        button:active {
+            scale: 0.9;
+        }
+
+        #errorDiv {
+            color: white;
+        }
+    </style>
+    <div>
+        <input type="text" placeholder="Search for a Gif!">
+        <button id="search">Get-A-Gif!</button>
+    </div>
+    <img src="">
+    <div id="errorDiv"></div>
+    <script>
+        const img = document.querySelector('img');
+        const errorDiv = document.querySelector('#errorDiv');
+        const input = document.querySelector('input');
+        input.addEventListener('keydown', (key) => {
+            if (key.code === 'Enter') {
+                fetchGif();
+            }
+        })
+
+        const searchButton = document.querySelector('#search');
+        searchButton.addEventListener('click', () => {
+            fetchGif();
+        })
+
+        const fetchGif = () => {
+            let inputValue = input.value.replaceAll(' ', '_');
+
+            fetch(`https://api.giphy.com/v1/gifs/translate?api_key=R4PLcmpuruX887afgBCBQriYesln9JNr&s=${inputValue}`, {mode: 'cors'})
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(response) {
+                img.src = response.data.images.original.url;
+                errorDiv.textContent = '';
+            })
+            .catch(function(err) {
+                img.src = "";
+                errorDiv.textContent = "Oops! We couldn't find what you were looking for!";
+            });
+        }
+        
+    </script>
+</body>
+</html>
