@@ -60,10 +60,19 @@
             fetchGif();
         })
 
-        const fetchGif = () => {
-            let inputValue = input.value.replaceAll(' ', '_');
+        async function fetchGif() {
+            let inputValue = input.value.replaceAll(' ', '_'); 
+            try {
+                const response = await fetch(`https://api.giphy.com/v1/gifs/translate?api_key=R4PLcmpuruX887afgBCBQriYesln9JNr&s=${inputValue}`, {mode: 'cors'});
+                const gifData = await response.json();
+                img.src = gifData.data.images.original.url;
+                errorDiv.textContent = '';
+            } catch {
+                img.src = "";
+                errorDiv.textContent = "Oops! We couldn't find what you were looking for!";
+            }
 
-            fetch(`https://api.giphy.com/v1/gifs/translate?api_key=R4PLcmpuruX887afgBCBQriYesln9JNr&s=${inputValue}`, {mode: 'cors'})
+            /*fetch(`https://api.giphy.com/v1/gifs/translate?api_key=R4PLcmpuruX887afgBCBQriYesln9JNr&s=${inputValue}`, {mode: 'cors'})
             .then(function(response) {
                 return response.json();
             })
@@ -74,7 +83,7 @@
             .catch(function(err) {
                 img.src = "";
                 errorDiv.textContent = "Oops! We couldn't find what you were looking for!";
-            });
+            });*/
         }
         
     </script>
